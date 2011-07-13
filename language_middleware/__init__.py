@@ -7,7 +7,8 @@ class LanguageMiddleware(object):
     def __init__(self, app):
         self.app = app
     
-    def _validate_language(self, language):
+    @staticmethod
+    def _validate_language(language):
         if language and language in VALID_LANGUAGES:
             return language
     
@@ -15,6 +16,7 @@ class LanguageMiddleware(object):
         could_have_language = environ['PATH_INFO'][0:4]
         language = re.findall('\/([a-z]{2,2})\/', could_have_language)
         if len(language) > 0:
+            environ['PATH_INFO'] = environ['PATH_INFO'][3:] #Remove language from url
             return self._validate_language(language[0])
     
     def _get_headers_language(self, environ):
