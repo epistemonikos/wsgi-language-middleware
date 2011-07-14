@@ -4,6 +4,7 @@
 test_language_middleware.py
 '''
 
+import os
 import unittest
 
 from ludibrio import Stub, any
@@ -40,10 +41,45 @@ class TestLanguageMiddleware(unittest.TestCase):
 	    self.assertRaises(Exception, LanguageMiddleware, self.app, 'fr')
 	
 	def test_get_language_using_another_default_language(self):
-	    language_middleware = LanguageMiddleware(self.app, default_language = 'fr', valid_languages = ('en', 'es', 'fr'))
+	    language_middleware = LanguageMiddleware(
+	        self.app,
+	        default_language = 'fr',
+	        valid_languages = ('en', 'es', 'fr')
+	    )
 	    environ = {}
 	    language_middleware.__call__(environ, None)
 	    self.assertEquals('fr', environ['ACTIVE_LANGUAGE'])
+	
+	def test_get_language_but_do_not_remove_language_part_from_url(self):
+	    language_middleware = LanguageMiddleware(
+	        self.app,
+	        default_language = 'fr',
+	        valid_languages = ('en', 'es', 'fr'),
+	        clean_url = False
+	    )
+	    environ = {'PATH_INFO': '/es/documents'}
+	    language_middleware.__call__(environ, None)
+	    self.assertEquals('es', environ['ACTIVE_LANGUAGE'])
+	    self.assertEquals('/es/documents', environ['PATH_INFO'])
+	    
+	def test_use_correct_locale(self):
+	    def html(environ, start_response):
+	        from mako.template import Template
+	        return Template("${_('Hello World')}").render()
+	    locale_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'fixtures/locale')
+	    language_middleware = LanguageMiddleware(
+            html,
+            default_language = 'fr',
+            valid_languages = ('en', 'es', 'fr'),
+            clean_url = False,
+            locale_path = locale_path,
+            locale_name = 'hello'
+        )
+	    spanish_response = language_middleware.__call__({'PATH_INFO': '/es/documents'}, None)
+	    english_response = language_middleware.__call__({'PATH_INFO': '/en/documents'}, None)
+	    self.assertEquals('Hola Mundo', spanish_response)
+	    self.assertEquals('Hello World', english_response)
+
     
 if __name__ == '__main__':
 	unittest.main()
