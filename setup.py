@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '0.1'
+version = '0.2'
 
 setup(name='language_middleware',
       version=version,
@@ -9,11 +9,11 @@ setup(name='language_middleware',
       long_description="""\
 """,
       classifiers=[], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
-      keywords='wsgi middleware language i18n',
+      keywords='wsgi middleware language i18n translation',
       author='Daniel P\xc3\xa9rez Rada',
-      author_email='',
-      url='',
-      license='',
+      author_email='daniel at etiqs com',
+      url='https://github.com/dperezrada/wsgi-language-middleware',
+      license='GNU Public License v3.0',
       packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
       include_package_data=True,
       zip_safe=False,

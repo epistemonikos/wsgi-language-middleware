@@ -45,19 +45,19 @@ class LanguageMiddleware(object):
     def __call__(self, environ, start_response):
         url_language = self._get_url_language(environ)
         if url_language and self._validate_language(url_language):
-            environ['ACTIVE_LANGUAGE'] = url_language
+            environ['HTTP_ACTIVE_LANGUAGE'] = url_language
         else:
             headers_language = self._get_headers_language(environ)
             if headers_language and self._validate_language(headers_language):
-                environ['ACTIVE_LANGUAGE'] = headers_language
+                environ['HTTP_ACTIVE_LANGUAGE'] = headers_language
             else:
-                environ['ACTIVE_LANGUAGE'] = self.default_language
+                environ['HTTP_ACTIVE_LANGUAGE'] = self.default_language
         if self.locale_path and self.locale_name:
-            if os.path.exists(os.path.join(self.locale_path, environ['ACTIVE_LANGUAGE'], "LC_MESSAGES")):
+            if os.path.exists(os.path.join(self.locale_path, environ['HTTP_ACTIVE_LANGUAGE'], "LC_MESSAGES")):
                 translation = gettext.translation(
                     self.locale_name,
                     self.locale_path,
-                    languages=[environ['ACTIVE_LANGUAGE']],
+                    languages=[environ['HTTP_ACTIVE_LANGUAGE']],
                     codeset="utf-8"
                 )
                 translation.install(unicode=True)

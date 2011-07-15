@@ -21,21 +21,21 @@ class TestLanguageMiddleware(unittest.TestCase):
 	    language_middleware = LanguageMiddleware(self.app)
 	    environ = {'PATH_INFO': '/es/ok'}
 	    language_middleware.__call__(environ, None)
-	    self.assertEquals('es', environ['ACTIVE_LANGUAGE'])
+	    self.assertEquals('es', environ['HTTP_ACTIVE_LANGUAGE'])
 	    self.assertEquals('/ok', environ['PATH_INFO'])
 
 	def test_get_language_from_url_without_language(self):
 	    language_middleware = LanguageMiddleware(self.app)
 	    environ = {'PATH_INFO': '/documents/1'}
 	    language_middleware.__call__(environ, None)
-	    self.assertEquals('en', environ['ACTIVE_LANGUAGE'])
+	    self.assertEquals('en', environ['HTTP_ACTIVE_LANGUAGE'])
 	    self.assertEquals('/documents/1', environ['PATH_INFO'])
 
 	def test_get_language_from_headers(self):
 	    language_middleware = LanguageMiddleware(self.app)
 	    environ = {'PATH_INFO': '/documents/1', 'HTTP_ACCEPT_LANGUAGE': 'es-cl,es;q=0.5'}
 	    language_middleware.__call__(environ, None)
-	    self.assertEquals('es', environ['ACTIVE_LANGUAGE'])
+	    self.assertEquals('es', environ['HTTP_ACTIVE_LANGUAGE'])
 	
 	def test_default_language_should_be_in_valid_languages(self):
 	    self.assertRaises(Exception, LanguageMiddleware, self.app, 'fr')
@@ -48,7 +48,7 @@ class TestLanguageMiddleware(unittest.TestCase):
 	    )
 	    environ = {}
 	    language_middleware.__call__(environ, None)
-	    self.assertEquals('fr', environ['ACTIVE_LANGUAGE'])
+	    self.assertEquals('fr', environ['HTTP_ACTIVE_LANGUAGE'])
 	
 	def test_get_language_but_do_not_remove_language_part_from_url(self):
 	    language_middleware = LanguageMiddleware(
@@ -59,7 +59,7 @@ class TestLanguageMiddleware(unittest.TestCase):
 	    )
 	    environ = {'PATH_INFO': '/es/documents'}
 	    language_middleware.__call__(environ, None)
-	    self.assertEquals('es', environ['ACTIVE_LANGUAGE'])
+	    self.assertEquals('es', environ['HTTP_ACTIVE_LANGUAGE'])
 	    self.assertEquals('/es/documents', environ['PATH_INFO'])
 	    
 	def test_use_correct_locale(self):
