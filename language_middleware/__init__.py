@@ -1,6 +1,7 @@
-import re
-import os
 import gettext
+import os
+import re
+
 
 class LanguageMiddleware(object):
     def __init__(

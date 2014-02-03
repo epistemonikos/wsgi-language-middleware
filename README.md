@@ -17,7 +17,7 @@ This Wsgi middleware, takes the language from urls similiar to "/es/documents" o
 
 ## Test
 
-	nosetests
+	python setup.py -q test
 	
 ## Usage
 ### Basic
