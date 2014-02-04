@@ -61,9 +61,7 @@ class TestLanguageMiddleware(unittest.TestCase):
     def test_use_correct_locale(self):
         def html(environ, start_response):
             from mako.template import Template
-            asdf = Template("${_('Hello World')}").render()
-            print asdf
-            return asdf
+            return Template("${_('Hello World')}").render()
         locale_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'fixtures/locale')
         language_middleware = LanguageMiddleware(
             html,
