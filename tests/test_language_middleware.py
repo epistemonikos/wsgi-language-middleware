@@ -12,7 +12,7 @@ class TestLanguageMiddleware(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.app = mock.Mock(side_effect=lambda x, y: 'Some text ;)')
-    
+
     def test_get_language_from_url_with_language(self):
         language_middleware = LanguageMiddleware(self.app)
         environ = {'PATH_INFO': '/es/ok'}
@@ -32,10 +32,16 @@ class TestLanguageMiddleware(unittest.TestCase):
         environ = {'PATH_INFO': '/documents/1', 'HTTP_ACCEPT_LANGUAGE': 'es-cl,es;q=0.5'}
         language_middleware.__call__(environ, None)
         self.assertEquals('es', environ['HTTP_ACTIVE_LANGUAGE'])
-    
+
+    def test_get_language_from_headers_with_force_lang(self):
+        language_middleware = LanguageMiddleware(self.app, force_lang=True)
+        environ = {'PATH_INFO': '/documents/1', 'HTTP_ACCEPT_LANGUAGE': 'es-cl,es;q=0.5'}
+        language_middleware.__call__(environ, None)
+        self.assertEquals('en', environ['HTTP_ACTIVE_LANGUAGE'])
+
     def test_default_language_should_be_in_valid_languages(self):
         self.assertRaises(Exception, LanguageMiddleware, self.app, 'fr')
-    
+
     def test_get_language_using_another_default_language(self):
         language_middleware = LanguageMiddleware(
             self.app,
@@ -45,7 +51,7 @@ class TestLanguageMiddleware(unittest.TestCase):
         environ = {}
         language_middleware.__call__(environ, None)
         self.assertEquals('fr', environ['HTTP_ACTIVE_LANGUAGE'])
-    
+
     def test_get_language_but_do_not_remove_language_part_from_url(self):
         language_middleware = LanguageMiddleware(
             self.app,
@@ -57,7 +63,7 @@ class TestLanguageMiddleware(unittest.TestCase):
         language_middleware.__call__(environ, None)
         self.assertEquals('es', environ['HTTP_ACTIVE_LANGUAGE'])
         self.assertEquals('/es/documents', environ['PATH_INFO'])
-        
+
     def test_use_correct_locale(self):
         def html(environ, start_response):
             from mako.template import Template
@@ -76,6 +82,6 @@ class TestLanguageMiddleware(unittest.TestCase):
         self.assertEquals('Hola Mundo', spanish_response)
         self.assertEquals('Hello World', english_response)
 
-    
+
 if __name__ == '__main__':
     unittest.main()

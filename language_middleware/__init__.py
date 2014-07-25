@@ -18,6 +18,7 @@ class LanguageMiddleware(object):
         if default_language not in valid_languages:
             raise Exception("Default language must be contained in valid languages")
 
+        self.app = app
         self.default_language = default_language
         self.valid_languages = valid_languages
         self.force_lang = force_lang
