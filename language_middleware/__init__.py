@@ -10,6 +10,7 @@ class LanguageMiddleware(object):
         app,
         default_language='en',
         valid_languages=('en', 'es'),
+        force_lang=False,
         clean_url=True,
         locale_path=None,
         locale_name=None
@@ -19,6 +20,7 @@ class LanguageMiddleware(object):
 
         self.default_language = default_language
         self.valid_languages = valid_languages
+        self.force_lang = force_lang
         self.clean_url = clean_url
         self.locale_path = locale_path
         self.locale_name = locale_name
@@ -50,7 +52,7 @@ class LanguageMiddleware(object):
             environ['HTTP_ACTIVE_LANGUAGE'] = url_language
         else:
             headers_language = self._get_headers_language(environ)
-            if headers_language and self._validate_language(headers_language):
+            if headers_language and self._validate_language(headers_language) and not self.force_lang:
                 environ['HTTP_ACTIVE_LANGUAGE'] = headers_language
             else:
                 environ['HTTP_ACTIVE_LANGUAGE'] = self.default_language
