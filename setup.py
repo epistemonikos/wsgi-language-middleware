@@ -10,7 +10,7 @@ setup(
       name='language_middleware',
       version=version,
       description="This Wsgi middleware, takes the language from urls similiar to '/es/documents' or from the Accept language header.",
-      long_description=read('README.md'),
+      long_description=read('README'),
       classifiers=[
             "Development Status :: 4 - Beta",
             "Topic :: Internet :: WWW/HTTP :: WSGI :: Middleware",
