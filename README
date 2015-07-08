@@ -72,3 +72,5 @@ IMPORTANT: **Default language locale path must exists, if not last successfully 
         locale_path = '/home/user/locale',
         locale_name = 'hello'
     )
+### Switching off global gettext translation installation
+If you want to take care of the locale loading yourself (e.g. by inspecting environ['HTTP_ACTIVE_LANGUAGE'] later on) or do not use gettext, you can suppress the installation of the gettext translation by using **do_gettext_install=False** in **LanguageMiddleware()** .
