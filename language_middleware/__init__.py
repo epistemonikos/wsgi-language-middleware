@@ -13,7 +13,8 @@ class LanguageMiddleware(object):
         force_lang=False,
         clean_url=True,
         locale_path=None,
-        locale_name=None
+        locale_name=None,
+        do_gettext_install=True
     ):
         if default_language not in valid_languages:
             raise Exception("Default language must be contained in valid languages")
@@ -25,6 +26,7 @@ class LanguageMiddleware(object):
         self.clean_url = clean_url
         self.locale_path = locale_path
         self.locale_name = locale_name
+        self.do_gettext_install = do_gettext_install
 
     def _validate_language(self, language):
         if language and language in self.valid_languages:
@@ -57,7 +59,7 @@ class LanguageMiddleware(object):
                 environ['HTTP_ACTIVE_LANGUAGE'] = headers_language
             else:
                 environ['HTTP_ACTIVE_LANGUAGE'] = self.default_language
-        if self.locale_path and self.locale_name:
+        if self.do_gettext_install and self.locale_path and self.locale_name:
             if os.path.exists(os.path.join(self.locale_path, environ['HTTP_ACTIVE_LANGUAGE'], "LC_MESSAGES")):
                 translation = gettext.translation(
                     self.locale_name,
