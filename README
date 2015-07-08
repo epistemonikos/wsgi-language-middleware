@@ -72,3 +72,8 @@ IMPORTANT: **Default language locale path must exists, if not last successfully 
         locale_path = '/home/user/locale',
         locale_name = 'hello'
     )
+
+### Set Script Name
+Starting with wsgi-language-middleware 0.4 you can pass **set_script_name** to **LanguageMiddleware**, it will set the **SCRIPT_NAME** to a slash followed by the chosen language (e.g. **/es**)
+
+This can help you if your application uses url-creation helpers (e.g. pylons **h.url()**), which do rely on the script name and should automatically prepend links with the given locale.

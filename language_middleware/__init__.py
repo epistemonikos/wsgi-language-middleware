@@ -13,7 +13,8 @@ class LanguageMiddleware(object):
         force_lang=False,
         clean_url=True,
         locale_path=None,
-        locale_name=None
+        locale_name=None,
+        set_script_name=False
     ):
         if default_language not in valid_languages:
             raise Exception("Default language must be contained in valid languages")
@@ -25,6 +26,7 @@ class LanguageMiddleware(object):
         self.clean_url = clean_url
         self.locale_path = locale_path
         self.locale_name = locale_name
+        self.set_script_name = set_script_name
 
     def _validate_language(self, language):
         if language and language in self.valid_languages:
@@ -66,4 +68,6 @@ class LanguageMiddleware(object):
                     codeset="utf-8"
                 )
                 translation.install(unicode=True)
+        if self.set_script_name:
+            environ['SCRIPT_NAME'] = "/%s" % environ['HTTP_ACTIVE_LANGUAGE']
         return self.app(environ, start_response)
