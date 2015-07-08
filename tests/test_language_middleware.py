@@ -82,6 +82,15 @@ class TestLanguageMiddleware(unittest.TestCase):
         self.assertEquals('Hola Mundo', spanish_response)
         self.assertEquals('Hello World', english_response)
 
+    def test_script_name_setting(self):
+        language_middleware = LanguageMiddleware(
+            self.app,
+            set_script_name = True)
+        environ = {}
+        language_middleware.__call__(environ, None)
+        self.assertEquals('en', environ['HTTP_ACTIVE_LANGUAGE'])
+        self.assertEquals('/en', environ['SCRIPT_NAME'])
+
 
 if __name__ == '__main__':
     unittest.main()
