@@ -1,4 +1,4 @@
-# WSGI Language Middleware 
+# WSGI Language Middleware
 
 ## Why?
 
@@ -18,7 +18,7 @@ This Wsgi middleware, takes the language from urls similiar to "/es/documents" o
 ## Test
 
 	python setup.py -q test
-	
+
 ## Usage
 ### Basic
     from language_middleware import LanguageMiddleware
@@ -32,7 +32,7 @@ Call to the url **/fr/documents**, and my_wsgi_app will receive:
 Call to the url **/documents/1**, and my_wsgi_app will receive:
 
     environ['HTTP_ACTIVE_LANGUAGE'] = 'es'
-    
+
 ### Clean URL
 The clean_url option, removes the language info from the URL.
 
@@ -77,3 +77,6 @@ IMPORTANT: **Default language locale path must exists, if not last successfully 
 Starting with wsgi-language-middleware 0.4 you can pass **set_script_name** to **LanguageMiddleware**, it will set the **SCRIPT_NAME** to a slash followed by the chosen language (e.g. **/es**)
 
 This can help you if your application uses url-creation helpers (e.g. pylons **h.url()**), which do rely on the script name and should automatically prepend links with the given locale.
+
+### Switching off global gettext translation installation
+If you want to take care of the locale loading yourself (e.g. by inspecting environ['HTTP_ACTIVE_LANGUAGE'] later on) or do not use gettext, you can suppress the installation of the gettext translation by using **do_gettext_install=False** in **LanguageMiddleware()** .
