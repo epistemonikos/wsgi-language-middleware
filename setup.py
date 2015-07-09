@@ -4,7 +4,7 @@ import sys, os
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
-version = '0.4'
+version = '0.5'
 
 setup(
       name='language_middleware',
